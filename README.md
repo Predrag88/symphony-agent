@@ -89,9 +89,28 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### 4. Automatski deployment na server 199.247.1.220
+### 4. Deployment na server 199.247.1.220
 
-#### Dodaj GitHub Secrets:
+#### Opcija 1: Webhook Deployment (Preporučeno)
+
+Ako nemate pristup GitHub Actions secrets, koristite webhook deployment:
+
+```bash
+# Pokrenite automatski setup
+chmod +x simple-deploy-setup.sh
+./simple-deploy-setup.sh
+```
+
+Script će:
+- Instalirati sve potrebne pakete na serveru
+- Podesiti Nginx i PHP-FPM
+- Klonirati projekat
+- Kreirati webhook endpoint
+- Generisati secret token
+
+#### Opcija 2: GitHub Actions (Napredni korisnici)
+
+Ako imate pristup GitHub Secrets:
 
 1. Idi na GitHub repozitorijum → Settings → Secrets and variables → Actions
 2. Dodaj sledeće secrets:
@@ -100,43 +119,82 @@ sudo systemctl reload nginx
 
 **Napomena**: Server IP (199.247.1.220) i port (22) su već konfigurisani u workflow-u.
 
-#### Pripremi server 199.247.1.220:
+### Webhook Setup Instrukcije
 
-**Opcija 1: Automatski setup (preporučeno)**
+Nakon pokretanja `simple-deploy-setup.sh` script-a:
+
+1. **Kopirajte webhook URL i secret** koji će script prikazati
+2. **Idite na GitHub repo → Settings → Webhooks**
+3. **Kliknite "Add webhook"**
+4. **Unesite podatke:**
+   - Payload URL: `http://199.247.1.220/webhook-deploy.php`
+   - Content type: `application/json`
+   - Secret: (kopirajte generisani secret)
+   - Events: Izaberite "Just the push event"
+   - Active: ✅ Označeno
+
+5. **Kliknite "Add webhook"**
+
+### Manuelni Server Setup (Alternativa)
+
+Ako ne možete da koristite automatski script:
+
 ```bash
-# Kopiraj setup script na server
-scp server-setup-199.247.1.220.sh user@199.247.1.220:~/
+# Instaliraj pakete
+apt update && apt install -y nginx php8.1-fpm php8.1-mysql php8.1-xml php8.1-mbstring php8.1-curl php8.1-zip composer git
 
-# Pokreni setup script
-ssh user@199.247.1.220 "chmod +x ~/server-setup-199.247.1.220.sh && ~/server-setup-199.247.1.220.sh"
-```
+# Kloniraj projekat
+cd /var/www/html
+git clone https://github.com/Predrag88/symphony-agent.git
+cd symphony-agent
+composer install --no-dev
 
-**Opcija 2: Manuelni setup**
-```bash
-# Kopiraj deploy script na server
-scp deploy.sh user@199.247.1.220:/var/www/html/symphony-agent/
-
-# Učini ga izvršnim
-ssh user@199.247.1.220 "chmod +x /var/www/html/symphony-agent/deploy.sh"
-
-# Dodaj sudo privilegije za web server restart
-ssh user@199.247.1.220 "sudo visudo"
-# Dodaj liniju: your-user ALL=(ALL) NOPASSWD: /bin/systemctl reload nginx, /bin/systemctl reload php8.1-fpm
+# Podesi dozvole
+chown -R www-data:www-data /var/www/html/symphony-agent
+chmod -R 755 /var/www/html/symphony-agent
 ```
 
 ### 5. Test deployment-a
 
-```bash
-# Push promene na GitHub
-git add .
-git commit -m "Update application"
-git push origin main
+#### Testiranje Webhook Deployment-a
 
-# GitHub Actions će automatski:
-# 1. Pokrenuti testove
-# 2. Deploy-ovati na server
-# 3. Restartovati servise
+Nakon setup-a, testirajte deployment:
+
+```bash
+# Napravite malu promenu i push-ujte
+echo "# Test deployment" >> README.md
+git add README.md
+git commit -m "Test webhook deployment"
+git push origin main
 ```
+
+#### Kako funkcioniše
+
+**Webhook Deployment:**
+1. **Push na main branch** → GitHub šalje webhook na server
+2. **Webhook prima zahtev** → Proverava signature i branch
+3. **Automatski deployment** → Pokreće deploy.sh script
+4. **Restart servisa** → Nginx i PHP-FPM se restartuju
+
+**GitHub Actions (ako je podešeno):**
+1. **Push na main branch** → GitHub Actions se automatski pokreće
+2. **Testiranje** → Pokreću se PHPUnit testovi
+3. **Deployment** → Kod se automatski deploy-uje na server
+4. **Restart servisa** → Nginx i PHP-FPM se restartuju
+
+#### Rezultat
+
+- **Server IP:** 199.247.1.220
+- **Aplikacija dostupna na:** http://199.247.1.220
+- **Webhook endpoint:** http://199.247.1.220/webhook-deploy.php
+- **Automatski deployment:** ✅ Svaki push na main branch
+
+#### Monitoring
+
+- **Webhook logovi:** `ssh root@199.247.1.220 "tail -f /var/log/webhook-deploy.log"`
+- **GitHub Actions status:** Pratite u GitHub repo → Actions tab (ako koristite)
+- **Server logovi:** `ssh root@199.247.1.220 "tail -f /var/log/nginx/error.log"`
+- **App logovi:** `ssh root@199.247.1.220 "tail -f /var/www/html/symphony-agent/var/log/prod.log"`
 
 ## Struktura projekta
 
