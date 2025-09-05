@@ -89,28 +89,38 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### 4. Automatski deployment sa GitHub Actions
+### 4. Automatski deployment na server 199.247.1.220
 
 #### Dodaj GitHub Secrets:
 
 1. Idi na GitHub repozitorijum → Settings → Secrets and variables → Actions
 2. Dodaj sledeće secrets:
-   - `HOST`: IP adresa ili domen servera
-   - `USERNAME`: SSH korisničko ime
-   - `KEY`: SSH privatni ključ
-   - `PORT`: SSH port (obično 22)
+   - `SSH_USERNAME`: SSH korisničko ime za server 199.247.1.220
+   - `SSH_PRIVATE_KEY`: SSH privatni ključ za pristup serveru
 
-#### Pripremi server za automatski deployment:
+**Napomena**: Server IP (199.247.1.220) i port (22) su već konfigurisani u workflow-u.
 
+#### Pripremi server 199.247.1.220:
+
+**Opcija 1: Automatski setup (preporučeno)**
+```bash
+# Kopiraj setup script na server
+scp server-setup-199.247.1.220.sh user@199.247.1.220:~/
+
+# Pokreni setup script
+ssh user@199.247.1.220 "chmod +x ~/server-setup-199.247.1.220.sh && ~/server-setup-199.247.1.220.sh"
+```
+
+**Opcija 2: Manuelni setup**
 ```bash
 # Kopiraj deploy script na server
-scp deploy.sh user@your-server:/var/www/html/symphony-agent/
+scp deploy.sh user@199.247.1.220:/var/www/html/symphony-agent/
 
 # Učini ga izvršnim
-ssh user@your-server "chmod +x /var/www/html/symphony-agent/deploy.sh"
+ssh user@199.247.1.220 "chmod +x /var/www/html/symphony-agent/deploy.sh"
 
-# Dodaj sudo privilegije za web server restart (opciono)
-sudo visudo
+# Dodaj sudo privilegije za web server restart
+ssh user@199.247.1.220 "sudo visudo"
 # Dodaj liniju: your-user ALL=(ALL) NOPASSWD: /bin/systemctl reload nginx, /bin/systemctl reload php8.1-fpm
 ```
 

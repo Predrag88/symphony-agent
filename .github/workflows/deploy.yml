@@ -35,18 +35,20 @@ jobs:
     - name: Run tests
       run: php bin/phpunit
       
-    - name: Deploy to server
+    - name: Deploy to server 199.247.1.220
       uses: appleboy/ssh-action@v0.1.5
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
+        host: 199.247.1.220
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
         script: |
-          cd /path/to/your/project
+          cd /var/www/html/symphony-agent
           git pull origin main
           composer install --no-dev --optimize-autoloader
           php bin/console cache:clear --env=prod
           php bin/console doctrine:migrations:migrate --no-interaction
+          sudo chown -R www-data:www-data var/
+          sudo chmod -R 775 var/
           sudo systemctl reload php8.1-fpm
           sudo systemctl reload nginx

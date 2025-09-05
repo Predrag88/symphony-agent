@@ -7,7 +7,7 @@ set -e
 
 echo "Starting deployment..."
 
-# Navigate to project directory
+# Navigate to project directory on server 199.247.1.220
 cd /var/www/html/symphony-agent
 
 # Pull latest changes from GitHub
