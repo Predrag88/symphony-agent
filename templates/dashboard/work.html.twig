@@ -1,0 +1,265 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Radni Prostor - VPA Dashboard{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-3">Radni Prostor</h1>
+        <p class="text-xl text-gray-600">Upravljajte vašim projektima i zadacima</p>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Active Projects -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden h-full">
+            <div class="bg-blue-600 text-white px-6 py-4">
+                <h5 class="text-lg font-semibold">
+                    <i class="fas fa-project-diagram mr-2"></i>
+                    Aktivni Projekti
+                </h5>
+            </div>
+            <div class="p-6">
+                    <div id="activeProjects">
+                        <div class="project-item border border-gray-200 rounded-lg p-4 mb-4">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h6 class="text-lg font-semibold text-gray-900 mb-1">VPA Dashboard</h6>
+                                    <p class="text-gray-600 mb-3">Symfony dashboard za n8n agenta</p>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                    <small class="text-gray-500">75% završeno</small>
+                                </div>
+                                <div class="flex space-x-2 ml-4">
+                                    <button class="px-3 py-1 border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="px-3 py-1 border border-green-500 text-green-500 rounded hover:bg-green-50">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-item border border-gray-200 rounded-lg p-4 mb-4">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h6 class="text-lg font-semibold text-gray-900 mb-1">AI Blog Generator</h6>
+                                    <p class="text-gray-600 mb-3">Automatsko generisanje blog sadržaja</p>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                    <small class="text-gray-500">45% završeno</small>
+                                </div>
+                                <div class="flex space-x-2 ml-4">
+                                    <button class="px-3 py-1 border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="px-3 py-1 border border-green-500 text-green-500 rounded hover:bg-green-50">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-item border border-gray-200 rounded-lg p-4 mb-4">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h6 class="text-lg font-semibold text-gray-900 mb-1">Crypto Tracker</h6>
+                                    <p class="text-gray-600 mb-3">Praćenje cena kriptovaluta</p>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 20%"></div>
+                                    </div>
+                                    <small class="text-gray-500">20% završeno</small>
+                                </div>
+                                <div class="flex space-x-2 ml-4">
+                                    <button class="px-3 py-1 border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="px-3 py-1 border border-green-500 text-green-500 rounded hover:bg-green-50">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors mt-4">
+                        <i class="fas fa-plus mr-2"></i>
+                        Novi Projekat
+                    </button>
+                </div>
+            </div>
+        
+        <!-- Recent Tasks -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden h-full">
+            <div class="bg-green-600 text-white px-6 py-4">
+                <h5 class="text-lg font-semibold">
+                    <i class="fas fa-tasks mr-2"></i>
+                    Nedavni Zadaci
+                </h5>
+            </div>
+            <div class="p-6">
+                    <div id="recentTasks">
+                        <div class="task-item flex items-center p-3 mb-3 border border-gray-200 rounded-lg">
+                            <div class="mr-4">
+                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" type="checkbox" checked>
+                            </div>
+                            <div class="flex-1">
+                                <span class="line-through text-gray-500">Kreirati Symfony kontrolere</span>
+                            </div>
+                            <small class="text-gray-500">Završeno</small>
+                        </div>
+                        
+                        <div class="task-item flex items-center p-3 mb-3 border border-gray-200 rounded-lg">
+                            <div class="mr-4">
+                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" type="checkbox" checked>
+                            </div>
+                            <div class="flex-1">
+                                <span class="line-through text-gray-500">Instalirati Bootstrap i jQuery</span>
+                            </div>
+                            <small class="text-gray-500">Završeno</small>
+                        </div>
+                        
+                        <div class="task-item flex items-center p-3 mb-3 border border-gray-200 rounded-lg">
+                            <div class="mr-4">
+                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" type="checkbox">
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-gray-900">Kreirati API endpoint-e</span>
+                            </div>
+                            <small class="text-yellow-600">U toku</small>
+                        </div>
+                        
+                        <div class="task-item flex items-center p-3 mb-3 border border-gray-200 rounded-lg">
+                            <div class="mr-4">
+                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" type="checkbox">
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-gray-900">Implementirati live refresh</span>
+                            </div>
+                            <small class="text-blue-600">Čeka</small>
+                        </div>
+                        
+                        <div class="task-item flex items-center p-3 mb-3 border border-gray-200 rounded-lg">
+                            <div class="mr-4">
+                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" type="checkbox">
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-gray-900">Testiranje funkcionalnosti</span>
+                            </div>
+                            <small class="text-blue-600">Čeka</small>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors mt-4">
+                        <i class="fas fa-plus mr-2"></i>
+                        Novi Zadatak
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Workflow Status -->
+    <div class="mt-8">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-cyan-600 text-white px-6 py-4">
+                <h5 class="text-lg font-semibold">
+                    <i class="fas fa-cogs mr-2"></i>
+                    n8n Workflow Status
+                </h5>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="text-center p-4 border border-gray-200 rounded-lg">
+                            <div class="status-indicator w-5 h-5 bg-green-500 rounded-full mx-auto mb-3"></div>
+                            <h6 class="text-lg font-semibold text-gray-900 mb-1">Prevodilac</h6>
+                            <small class="text-gray-600">Aktivan</small>
+                        </div>
+                        <div class="text-center p-4 border border-gray-200 rounded-lg">
+                            <div class="status-indicator w-5 h-5 bg-green-500 rounded-full mx-auto mb-3"></div>
+                            <h6 class="text-lg font-semibold text-gray-900 mb-1">Blog Writer</h6>
+                            <small class="text-gray-600">Aktivan</small>
+                        </div>
+                        <div class="text-center p-4 border border-gray-200 rounded-lg">
+                            <div class="status-indicator w-5 h-5 bg-yellow-500 rounded-full mx-auto mb-3"></div>
+                            <h6 class="text-lg font-semibold text-gray-900 mb-1">Chat Asistenti</h6>
+                            <small class="text-gray-600">Ograničeno</small>
+                        </div>
+                        <div class="text-center p-4 border border-gray-200 rounded-lg">
+                            <div class="status-indicator w-5 h-5 bg-red-500 rounded-full mx-auto mb-3"></div>
+                            <h6 class="text-lg font-semibold text-gray-900 mb-1">Crypto Tracker</h6>
+                            <small class="text-gray-600">Neaktivan</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function() {
+    // Task checkbox handling
+    $('.task-item input[type="checkbox"]').on('change', function() {
+        const taskText = $(this).closest('.task-item').find('span');
+        const statusText = $(this).closest('.task-item').find('small');
+        
+        if ($(this).is(':checked')) {
+            taskText.addClass('line-through text-gray-500').removeClass('text-gray-900');
+            statusText.text('Završeno').removeClass().addClass('text-gray-500');
+        } else {
+            taskText.removeClass('line-through text-gray-500').addClass('text-gray-900');
+            statusText.text('U toku').removeClass().addClass('text-yellow-600');
+        }
+    });
+    
+    // Auto-refresh workflow status every 30 seconds
+    setInterval(checkWorkflowStatus, 30000);
+});
+
+function checkWorkflowStatus() {
+    // This would typically make an AJAX call to check n8n workflow status
+    console.log('Checking workflow status...');
+}
+</script>
+
+<style>
+.project-item {
+    transition: all 0.3s ease;
+}
+
+.project-item:hover {
+    background-color: #f9fafb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.task-item {
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    background-color: #f9fafb;
+}
+
+.status-indicator {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+</style>
+{% endblock %}

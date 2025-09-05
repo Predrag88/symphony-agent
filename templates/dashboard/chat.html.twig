@@ -1,0 +1,361 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat Asistenti - VPA Dashboard{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Chat Asistenti</h1>
+        <p class="text-xl text-gray-600">Izaberite specijalizovanog asistenta za vaše potrebe</p>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Prevodilac Card -->
+        <div class="group">
+            <a href="{{ path('app_translator') }}" class="block bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-language text-2xl"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Prevodilac</h2>
+                    <p class="text-sm text-gray-600">Prevedi tekst između različitih jezika sa visokom preciznošću</p>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Sveobuhvatni Chat Card -->
+        <div class="group">
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full cursor-pointer chat-card" data-chat-type="sveobuhvatni">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-comments text-2xl"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Sveobuhvatni Chat</h2>
+                    <p class="text-sm text-gray-600">Opšti AI asistent za sve vaše pitanja i potrebe</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Brend Chat Card -->
+        <div class="group">
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full cursor-pointer chat-card" data-chat-type="brend">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-lightbulb text-2xl"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Brend Chat</h2>
+                    <p class="text-sm text-gray-600">Specijalizovani AI asistent za brending i marketing</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- WordPress Chat Card -->
+        <div class="group">
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full cursor-pointer chat-card" data-chat-type="wordpress">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-gray-100 text-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fab fa-wordpress text-2xl"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">WordPress Chat</h2>
+                    <p class="text-sm text-gray-600">Specijalizovani AI asistent za WordPress razvoj i podršku</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CyberPanel Chat Card -->
+        <div class="group">
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full cursor-pointer chat-card" data-chat-type="cyberpanel">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-server text-2xl"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">CyberPanel Chat</h2>
+                    <p class="text-sm text-gray-600">Specijalizovani AI asistent za CyberPanel administraciju</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Blog Writer Card -->
+        <div class="group">
+            <a href="{{ path('app_blog_writer') }}" class="block bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-blog text-2xl"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Blog Writer</h2>
+                    <p class="text-sm text-gray-600">AI asistent za kreiranje kvalitetnog blog sadržaja</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Chat Modal -->
+<div id="chatModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="chatModalLabel" aria-hidden="true">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+        
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        
+        <div class="inline-block w-full max-w-4xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-medium leading-6 text-gray-900" id="chatModalLabel">Chat Asistent</h3>
+                <button type="button" class="text-gray-400 hover:text-gray-600 focus:outline-none" onclick="closeChatModal()">
+                    <span class="sr-only">Close</span>
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="chat-container" class="h-96 overflow-y-auto border border-gray-200 rounded-lg p-4 bg-gray-50 mb-4">
+                <div id="chat-messages">
+                    <!-- Chat messages will be displayed here -->
+                </div>
+            </div>
+            
+            <div class="flex space-x-2">
+                <input type="text" id="chat-input" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Unesite vašu poruku..." maxlength="500">
+                <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors" type="button" id="send-message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+let currentChatType = '';
+let chatHistory = {};
+
+function openChatModal(chatType) {
+    currentChatType = chatType;
+    
+    // Set modal title based on chat type
+    const titles = {
+        'sveobuhvatni': 'Sveobuhvatni Chat',
+        'brend': 'Brend Chat',
+        'wordpress': 'WordPress Chat',
+        'cyberpanel': 'CyberPanel Chat'
+    };
+    
+    $('#chatModalLabel').text(titles[chatType] || 'Chat Asistent');
+    
+    // Load chat history if exists
+    if (chatHistory[chatType]) {
+        $('#chat-messages').html(chatHistory[chatType]);
+    } else {
+        $('#chat-messages').html(getWelcomeMessage(chatType));
+    }
+    
+    // Show modal
+    $('#chatModal').removeClass('hidden');
+    
+    // Focus on input
+    setTimeout(() => {
+        $('#chat-input').focus();
+    }, 500);
+}
+
+function closeChatModal() {
+    $('#chatModal').addClass('hidden');
+    $('#chat-input').val('');
+}
+
+function getWelcomeMessage(chatType) {
+    const welcomeMessages = {
+        'sveobuhvatni': 'Pozdrav! Ja sam vaš sveobuhvatni AI asistent. Mogu da vam pomognem sa različitim pitanjima i zadacima. Kako mogu da vam pomognem danas?',
+        'brend': 'Dobrodošli u Brend Chat! Specijalizovan sam za brending, marketing strategije i kreativne rešenja. Kako mogu da pomognem vašem brendu?',
+        'wordpress': 'Pozdrav! Ja sam WordPress specijalizovani asistent. Mogu da vam pomognem sa razvojem, optimizacijom i rešavanjem problema na WordPress sajtovima.',
+        'cyberpanel': 'Dobrodošli u CyberPanel Chat! Specijalizovan sam za administraciju servera i CyberPanel konfiguraciju. Kako mogu da vam pomognem?'
+    };
+    
+    return `
+        <div class="mb-4">
+            <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm max-w-xs lg:max-w-md">
+                    <p class="text-gray-800">${welcomeMessages[chatType]}</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function addMessage(message, isUser = false) {
+    const messageHtml = `
+        <div class="mb-4">
+            <div class="flex items-start space-x-3 ${isUser ? 'justify-end' : ''}">
+                ${!isUser ? `
+                    <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                ` : ''}
+                <div class="${isUser ? 'bg-blue-600 text-white ml-auto' : 'bg-white text-gray-800'} p-4 rounded-lg shadow-sm max-w-xs lg:max-w-md">
+                    <p>${message}</p>
+                </div>
+                ${isUser ? `
+                    <div class="w-10 h-10 bg-gray-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user"></i>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `;
+    
+    $('#chat-messages').append(messageHtml);
+    
+    // Scroll to bottom
+    const chatContainer = $('#chat-container')[0];
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    
+    // Save to history
+    chatHistory[currentChatType] = $('#chat-messages').html();
+}
+
+function sendMessage() {
+    const message = $('#chat-input').val().trim();
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, true);
+    
+    // Clear input
+    $('#chat-input').val('');
+    
+    // Show typing indicator
+    const typingHtml = `
+        <div class="mb-4 typing-indicator">
+            <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm max-w-xs lg:max-w-md">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    $('#chat-messages').append(typingHtml);
+    
+    // Scroll to bottom
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Send to API
+    const apiEndpoints = {
+        'sveobuhvatni': '/api/sveobuhvatni-chat',
+        'brend': '/api/brend-chat',
+        'wordpress': '/api/wordpress-chat',
+        'cyberpanel': '/api/cyberpanel'
+    };
+    
+    $.ajax({
+        url: apiEndpoints[currentChatType],
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ message: message }),
+        success: function(response) {
+            // Remove typing indicator
+            $('.typing-indicator').remove();
+            
+            // Add AI response
+            let aiResponse = response;
+            if (typeof response === 'object') {
+                aiResponse = response.message || response.response || JSON.stringify(response);
+            }
+            
+            addMessage(aiResponse, false);
+        },
+        error: function(xhr, status, error) {
+            // Remove typing indicator
+            $('.typing-indicator').remove();
+            
+            addMessage('Izvinjavam se, došlo je do greške. Molimo pokušajte ponovo.', false);
+        }
+    });
+}
+
+$(document).ready(function() {
+    // Send message on button click
+    $('#send-message').on('click', sendMessage);
+    
+    // Send message on Enter key
+    $('#chat-input').on('keypress', function(e) {
+        if (e.which === 13) {
+            sendMessage();
+        }
+    });
+    
+    // Add click event for chat cards that open modal
+    $('.chat-card[data-chat-type]').on('click', function() {
+        const chatType = $(this).data('chat-type');
+        if (chatType && chatType !== 'blog') { // Blog Writer has its own link
+            openChatModal(chatType);
+        }
+    });
+    
+    // Clear chat history when modal is hidden
+    $('#chatModal').on('hidden.bs.modal', function() {
+        $('#chat-input').val('');
+    });
+});
+</script>
+
+<style>
+.feature-icon-tile {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.75rem;
+}
+
+.chat-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.chat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.typing-dots {
+    display: inline-block;
+}
+
+.typing-dots span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #6b7280;
+    margin: 0 2px;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes typing {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}
+</style>
+{% endblock %}

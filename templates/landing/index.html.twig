@@ -1,0 +1,241 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}n8n Agent - Automatizacija Workflow-a{% endblock %}
+
+{% block body %}
+<div class="bg-gray-50 min-h-screen">
+    <!-- Top Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-gray-900">n8n Agent</h1>
+                    </div>
+                </div>
+                
+                <!-- Auth Buttons -->
+                <div class="flex items-center space-x-4">
+                    <button id="loginBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-300 font-medium">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Prijavi se
+                    </button>
+                    <button id="registerBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-all duration-300 font-medium">
+                        <i class="fas fa-user-plus mr-2"></i>Registruj se
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Automatizuj svoje <span class="text-blue-600">workflow-e</span>
+            </h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Moćan n8n agent koji omogućava kreiranje, upravljanje i automatizaciju složenih workflow-a kroz intuitivni dashboard.
+            </p>
+            <div class="mt-8 flex justify-center space-x-4">
+                <button id="getStartedBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 hover:-translate-y-1">
+                    <i class="fas fa-rocket mr-2"></i>Počni odmah
+                </button>
+                <a href="{{ path('app_dashboard') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-lg font-medium transition-all duration-300 hover:-translate-y-1">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">Funkcionalnosti</h2>
+            <p class="text-lg text-gray-600">
+                Sve što ti treba za automatizaciju workflow-a
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 group">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
+                    <i class="fas fa-bolt text-2xl text-blue-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Brza automatizacija</h3>
+                <p class="text-gray-600">
+                    Kreiraj i pokreni workflow-e u nekoliko klikova kroz intuitivni dashboard.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 group">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-green-200 transition-colors">
+                    <i class="fas fa-chart-line text-2xl text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Real-time monitoring</h3>
+                <p class="text-gray-600">
+                    Prati status svojih workflow-a u realnom vremenu sa detaljnim logovima.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 group">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
+                    <i class="fas fa-puzzle-piece text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Modularna arhitektura</h3>
+                <p class="text-gray-600">
+                    Kombinuj različite servise i API-je kroz jednostavne module.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 group">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-red-200 transition-colors">
+                    <i class="fas fa-shield-alt text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Sigurnost</h3>
+                <p class="text-gray-600">
+                    Svi podaci su šifrovani i bezbedno čuvani sa naprednim sigurnosnim merama.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 group">
+                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-yellow-200 transition-colors">
+                    <i class="fas fa-cogs text-2xl text-yellow-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Webhook integracija</h3>
+                <p class="text-gray-600">
+                    Povezuj različite servise kroz webhook-e i API pozive.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 group">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-indigo-200 transition-colors">
+                    <i class="fas fa-clock text-2xl text-indigo-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Zakazano izvršavanje</h3>
+                <p class="text-gray-600">
+                    Pokreći workflow-e automatski u određeno vreme ili na osnovu događaja.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-6 border w-96 shadow-xl rounded-xl bg-white">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-900">Prijavi se</h3>
+                <button id="closeLoginModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="email">
+                        Email
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="email" type="email" placeholder="tvoj@email.com">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="password">
+                        Lozinka
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="password" type="password" placeholder="******************">
+                </div>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:-translate-y-1" type="submit">
+                    Prijavi se
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-6 border w-96 shadow-xl rounded-xl bg-white">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-900">Registruj se</h3>
+                <button id="closeRegisterModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <form id="registerForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="regName">
+                        Ime
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" id="regName" type="text" placeholder="Tvoje ime">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="regEmail">
+                        Email
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" id="regEmail" type="email" placeholder="tvoj@email.com">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="regPassword">
+                        Lozinka
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" id="regPassword" type="password" placeholder="******************">
+                </div>
+                <button class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:-translate-y-1" type="submit">
+                    Registruj se
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function() {
+        // Show login modal
+        $('#loginBtn').click(function() {
+            $('#loginModal').removeClass('hidden');
+        });
+
+        // Show register modal
+        $('#registerBtn').click(function() {
+            $('#registerModal').removeClass('hidden');
+        });
+
+        // Close modals
+        $('#closeLoginModal').click(function() {
+            $('#loginModal').addClass('hidden');
+        });
+
+        $('#closeRegisterModal').click(function() {
+            $('#registerModal').addClass('hidden');
+        });
+
+        // Close modal when clicking outside
+        $(window).click(function(event) {
+            if (event.target.id === 'loginModal') {
+                $('#loginModal').addClass('hidden');
+            }
+            if (event.target.id === 'registerModal') {
+                $('#registerModal').addClass('hidden');
+            }
+        });
+
+        // Handle login form
+        $('#loginForm').submit(function(e) {
+            e.preventDefault();
+            // Redirect to dashboard
+            window.location.href = '{{ path('app_dashboard') }}';
+        });
+
+        // Handle register form
+        $('#registerForm').submit(function(e) {
+            e.preventDefault();
+            // Redirect to dashboard
+            window.location.href = '{{ path('app_dashboard') }}';
+        });
+
+        // Get started button
+        $('#getStartedBtn').click(function() {
+            $('#registerModal').removeClass('hidden');
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,687 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advertise Image Generator{% endblock %}
+
+{# Cache bust: {{ "now"|date("Y-m-d H:i:s") }} #}
+
+{% block body %}
+<div class="min-h-screen bg-gray-50 py-4 md:py-12">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-6 md:mb-12">
+            <div class="flex items-center justify-center mb-4 md:mb-6">
+                <div class="bg-blue-100 p-2 md:p-3 rounded-full">
+                    <svg class="w-6 h-6 md:w-8 md:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div>
+                <h1 class="text-2xl md:text-4xl font-bold text-gray-900">AI Generator Slika</h1>
+                <p class="text-sm md:text-xl text-gray-600 mt-2 px-2">Pretvori sliku proizvoda u lifestyle fotografiju za Instagram</p>
+                <!-- DEBUG: Template updated at 2025-01-15 12:50:00 -->
+            </div>
+        </div>
+
+        <!-- Main Form Card with Tabs -->
+        <div class="bg-white rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl overflow-hidden">
+            <!-- Mobile Tab Navigation (Dropdown) -->
+            <div class="md:hidden bg-gray-50 border-b border-gray-200 px-4 py-3">
+                <div class="relative">
+                    <button id="mobile-tab-dropdown" class="w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-200 rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <span id="current-tab-text" class="flex items-center text-sm font-medium text-gray-700">
+                            <i class="fas fa-box mr-2 text-blue-600"></i>
+                            1. Proizvod
+                        </span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </button>
+                    <div id="mobile-tab-menu" class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                        <button class="mobile-tab-option w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center text-sm" data-tab="product-tab" data-step="1">
+                            <i class="fas fa-box mr-3 text-blue-600"></i>
+                            <span>1. Proizvod</span>
+                        </button>
+                        <button class="mobile-tab-option w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center text-sm border-t border-gray-100" data-tab="model-tab" data-step="2">
+                            <i class="fas fa-user mr-3 text-green-600"></i>
+                            <span>2. Model</span>
+                        </button>
+                        <button class="mobile-tab-option w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center text-sm border-t border-gray-100" data-tab="scene-tab" data-step="3">
+                            <i class="fas fa-camera mr-3 text-purple-600"></i>
+                            <span>3. Scena & Stil</span>
+                        </button>
+                        <button class="mobile-tab-option w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center text-sm border-t border-gray-100 hidden" data-tab="result-tab" data-step="4">
+                            <i class="fas fa-image mr-3 text-orange-600"></i>
+                            <span>4. Rezultat</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desktop Tab Navigation -->
+            <div class="hidden md:block bg-gray-50 border-b border-gray-200 px-6 py-4">
+                <div class="flex space-x-2" id="productTabs">
+                    <button class="tab-button active bg-blue-50 border border-blue-200 text-blue-700 font-semibold px-5 py-3 rounded-xl transition-all duration-300 hover:bg-blue-100 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="product-tab" data-target="#product" type="button" role="tab">
+                        <i class="fas fa-box mr-2"></i>
+                        Proizvod
+                    </button>
+                    <button class="tab-button bg-white border border-gray-200 text-gray-600 font-medium px-5 py-3 rounded-xl transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="model-tab" data-target="#model" type="button" role="tab">
+                        <i class="fas fa-user mr-2"></i>
+                        Model
+                    </button>
+                    <button class="tab-button bg-white border border-gray-200 text-gray-600 font-medium px-5 py-3 rounded-xl transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="scene-tab" data-target="#scene" type="button" role="tab">
+                        <i class="fas fa-camera mr-2"></i>
+                        Scena & Stil
+                    </button>
+                    <button class="tab-button bg-white border border-gray-200 text-gray-600 font-medium px-5 py-3 rounded-xl transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 hidden" id="result-tab" data-target="#result" type="button" role="tab">
+                        <i class="fas fa-image mr-2"></i>
+                        Rezultat
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="p-4 md:p-8">
+                {{ form_start(form, {'attr': {'id': 'productForm', 'enctype': 'multipart/form-data'}}) }}
+                
+                <div class="tab-content" id="productTabContent">
+                    <!-- Product Tab -->
+                    <div class="tab-pane active" id="product" role="tabpanel">
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
+                            <i class="fas fa-box text-blue-600 mr-2 md:mr-3"></i>
+                            Informacije o proizvodu
+                        </h3>
+                        
+                        <!-- Slika proizvoda -->
+                        <div class="mb-6 md:mb-8">
+                            {{ form_label(form.productImage, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                            <div class="mt-1 flex justify-center px-4 md:px-6 pt-8 md:pt-5 pb-8 md:pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors touch-manipulation">
+                                <div class="space-y-2 md:space-y-1 text-center">
+                                    <div id="imagePreview" class="hidden mb-4">
+                                        <img id="previewImg" src="" alt="Preview" class="max-w-full h-24 md:h-32 object-contain mx-auto rounded">
+                                    </div>
+                                    <svg class="mx-auto h-16 w-16 md:h-12 md:w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex flex-col md:flex-row items-center justify-center text-sm text-gray-600">
+                                        <label for="{{ form.productImage.vars.id }}" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 px-3 py-2 md:px-2 md:py-1 text-base md:text-sm">
+                                            <span>Otpremite sliku</span>
+                                            {{ form_widget(form.productImage, {'attr': {'class': 'sr-only', 'onchange': 'previewImage(this)', 'accept': 'image/*'}}) }}
+                                        </label>
+                                        <p class="mt-1 md:mt-0 md:pl-1 text-base md:text-sm">ili prevucite ovde</p>
+                                    </div>
+                                    <p class="text-sm md:text-xs text-gray-500">JPEG, PNG, JPG do 5MB</p>
+                                </div>
+                            </div>
+                            {{ form_errors(form.productImage) }}
+                            
+                            <!-- Preview slike -->
+                            <div id="imagePreviewContainer" class="mt-4 hidden">
+                                <div class="relative inline-block w-full md:w-auto">
+                                    <img id="previewImgLarge" src="" alt="Preview" class="w-full md:max-w-full h-48 md:h-48 object-cover rounded-lg shadow-md">
+                                    <button type="button" id="removeImage" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 md:w-6 md:h-6 flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation">
+                                        <i class="fas fa-times text-sm md:text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kratki opis proizvoda -->
+                        <div class="mb-6">
+                            {{ form_label(form.productDescription, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                            {{ form_widget(form.productDescription, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base', 'rows': '3'}}) }}
+                            {{ form_errors(form.productDescription) }}
+                        </div>
+
+                        <div class="flex justify-center md:justify-end">
+                            <button type="button" class="next-tab w-full md:w-auto bg-blue-600 text-white px-6 py-4 md:py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium text-base" data-next="model-tab">
+                                Sledeće: Model <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Model Tab -->
+                    <div class="tab-pane hidden" id="model" role="tabpanel">
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
+                            <i class="fas fa-user text-blue-600 mr-2 md:mr-3"></i>
+                            Karakteristike modela
+                        </h3>
+                        
+                        <div class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6 mb-6">
+                            <!-- Model / Pol -->
+                            <div>
+                                {{ form_label(form.modelGender, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                                {{ form_widget(form.modelGender, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                                {{ form_errors(form.modelGender) }}
+                            </div>
+                            
+                            <!-- Broj i tip modela -->
+                            <div>
+                                {{ form_label(form.modelType, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                                {{ form_widget(form.modelType, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                                {{ form_errors(form.modelType) }}
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6 mb-6">
+                            <!-- Godine -->
+                            <div>
+                                {{ form_label(form.modelAge, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                                {{ form_widget(form.modelAge, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                                {{ form_errors(form.modelAge) }}
+                            </div>
+                            
+                            <!-- Etnička pripadnost -->
+                            <div>
+                                {{ form_label(form.ethnicity, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                                {{ form_widget(form.ethnicity, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                                {{ form_errors(form.ethnicity) }}
+                            </div>
+                        </div>
+
+                        <!-- Stil odeće -->
+                        <div class="mb-6">
+                            {{ form_label(form.clothingStyle, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                            {{ form_widget(form.clothingStyle, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                            {{ form_errors(form.clothingStyle) }}
+                        </div>
+
+                        <div class="flex flex-col md:flex-row justify-between space-y-3 md:space-y-0">
+                            <button type="button" class="prev-tab w-full md:w-auto bg-gray-500 text-white px-6 py-4 md:py-3 rounded-lg hover:bg-gray-600 transition-colors font-medium text-base" data-prev="product-tab">
+                                <i class="fas fa-arrow-left mr-2"></i> Nazad: Proizvod
+                            </button>
+                            <button type="button" class="next-tab w-full md:w-auto bg-blue-600 text-white px-6 py-4 md:py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium text-base" data-next="scene-tab">
+                                Sledeće: Scena & Stil <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Scene & Style Tab -->
+                    <div class="tab-pane hidden" id="scene" role="tabpanel">
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
+                            <i class="fas fa-camera text-blue-600 mr-2 md:mr-3"></i>
+                            Scena i stil fotografije
+                        </h3>
+                        
+                        <div class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6 mb-6">
+                            <!-- Scena / Okruženje -->
+                            <div>
+                                {{ form_label(form.sceneEnvironment, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                                {{ form_widget(form.sceneEnvironment, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                                {{ form_errors(form.sceneEnvironment) }}
+                            </div>
+                            
+                            <!-- Aktivnost / Interakcija -->
+                            <div>
+                                {{ form_label(form.activity, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                                {{ form_widget(form.activity, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                                {{ form_errors(form.activity) }}
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-6 mb-6">
+                            <!-- Osvetljenje / Atmosfera -->
+                            <div>
+                                {{ form_label(form.lighting, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                                {{ form_widget(form.lighting, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                                {{ form_errors(form.lighting) }}
+                            </div>
+                            
+                            <!-- Stil fotografije -->
+                            <div>
+                                {{ form_label(form.photoStyle, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                                {{ form_widget(form.photoStyle, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                                {{ form_errors(form.photoStyle) }}
+                            </div>
+                        </div>
+
+                        <!-- Perspektiva / Fokus -->
+                        <div class="mb-6">
+                            {{ form_label(form.perspective, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                            {{ form_widget(form.perspective, {'attr': {'class': 'w-full px-3 py-3 md:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base'}}) }}
+                            {{ form_errors(form.perspective) }}
+                        </div>
+
+                        <div class="flex flex-col md:flex-row justify-between space-y-3 md:space-y-0">
+                            <button type="button" class="prev-tab w-full md:w-auto bg-gray-500 text-white px-6 py-4 md:py-3 rounded-lg hover:bg-gray-600 transition-colors font-medium text-base" data-prev="model-tab">
+                                <i class="fas fa-arrow-left mr-2"></i> Nazad: Model
+                            </button>
+                            <div class="w-full md:w-auto">
+                                {{ form_widget(form.submit, {'attr': {'class': 'w-full md:w-auto bg-green-600 text-white px-8 py-4 md:py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold text-base'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Result Tab -->
+                    <div class="tab-pane hidden" id="result" role="tabpanel">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                            <i class="fas fa-image text-blue-600 mr-3"></i>
+                            Generisana slika
+                        </h3>
+                        
+                        <!-- Loading State -->
+                        <div id="loadingState" class="text-center py-8 md:py-12">
+                            <div class="inline-flex items-center px-4 md:px-6 py-3 md:py-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                <div class="animate-spin rounded-full h-5 w-5 md:h-6 md:w-6 border-b-2 border-blue-600 mr-2 md:mr-3"></div>
+                                <span class="text-blue-800 font-medium text-sm md:text-base">Generiram sliku... Molimo sačekajte.</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Success State -->
+                        <div id="successState" class="hidden">
+                            <!-- Success Message -->
+                            <div class="mb-4 md:mb-6 p-3 md:p-4 bg-green-50 border border-green-200 rounded-lg">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 md:w-5 md:h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="text-green-800 font-medium text-sm md:text-base">Slika je uspešno generisana!</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Image Display -->
+                            <div class="text-center mb-4 md:mb-6">
+                                <div class="bg-gray-50 rounded-lg p-2 md:p-4 inline-block">
+                                    <img id="generatedImage" src="" alt="Generisana slika" class="max-w-full max-h-64 md:max-h-96 rounded-lg shadow-lg">
+                                </div>
+                            </div>
+                            
+                            <!-- Download Button -->
+                            <div class="text-center mb-4 md:mb-6">
+                                <a id="downloadGeneratedBtn" href="#" target="_blank"
+                                   class="inline-flex items-center w-full md:w-auto px-6 md:px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl justify-center">
+                                    <svg class="w-4 h-4 md:w-5 md:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    Preuzmi sliku
+                                </a>
+                            </div>
+                            
+                            <!-- Generate Another -->
+                            <div class="text-center pt-4 md:pt-6 border-t border-gray-200">
+                                <button type="button" onclick="resetForm()" 
+                                       class="inline-flex items-center w-full md:w-auto px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors duration-200 justify-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Generiši novu sliku
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Error State -->
+                        <div id="errorState" class="hidden text-center py-8 md:py-12">
+                            <div class="p-4 md:p-6 bg-red-50 border border-red-200 rounded-lg">
+                                <div class="flex items-center justify-center mb-3 md:mb-4">
+                                    <svg class="w-6 h-6 md:w-8 md:h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-base md:text-lg font-medium text-red-800 mb-2">Greška pri generisanju slike</h3>
+                                <p class="text-red-600 mb-3 md:mb-4 text-sm md:text-base" id="errorMessage">Došlo je do greške. Molimo pokušajte ponovo.</p>
+                                <button type="button" onclick="resetForm()" 
+                                       class="inline-flex items-center w-full md:w-auto px-6 py-3 bg-red-100 text-red-700 font-medium rounded-lg hover:bg-red-200 transition-colors duration-200 justify-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Pokušaj ponovo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js?v={{ 'now'|date('U') }}"></script>
+<script>
+// Force cache refresh
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+            registration.unregister();
+        }
+    });
+}
+
+// Clear browser cache
+if (window.caches) {
+    caches.keys().then(function(names) {
+        for (let name of names) {
+            caches.delete(name);
+        }
+    });
+}
+// Preview uploaded image
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('previewImgLarge').src = e.target.result;
+            document.getElementById('imagePreviewContainer').classList.remove('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Remove image functionality
+$(document).ready(function() {
+    $(document).on('click', '#removeImage', function() {
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput) {
+            fileInput.value = '';
+        }
+        $('#imagePreviewContainer').addClass('hidden');
+        $('#previewImgLarge').attr('src', '');
+    });
+    
+    // Drag and drop functionality
+    const dropZone = $('.border-dashed').parent();
+    
+    dropZone.on('dragover', function(e) {
+        e.preventDefault();
+        $(this).addClass('border-blue-400 bg-blue-50');
+    });
+    
+    dropZone.on('dragleave', function(e) {
+        e.preventDefault();
+        $(this).removeClass('border-blue-400 bg-blue-50');
+    });
+    
+    dropZone.on('drop', function(e) {
+        e.preventDefault();
+        $(this).removeClass('border-blue-400 bg-blue-50');
+        
+        const files = e.originalEvent.dataTransfer.files;
+        if (files.length > 0) {
+            const input = document.querySelector('input[type="file"]');
+            if (input) {
+                input.files = files;
+                previewImage(input);
+            }
+        }
+    });
+});
+
+// Mobile dropdown functionality
+$('#mobile-tab-dropdown').on('click', function() {
+    $('#mobile-tab-menu').toggleClass('hidden');
+});
+
+$('.mobile-tab-option').on('click', function() {
+    const tabId = $(this).data('tab');
+    const step = $(this).data('step');
+    const text = $(this).find('span').text();
+    const icon = $(this).find('i').attr('class');
+    
+    // Update dropdown text
+    $('#current-tab-text').html(`<i class="${icon} mr-2"></i>${text}`);
+    
+    // Hide dropdown menu
+    $('#mobile-tab-menu').addClass('hidden');
+    
+    // Switch tab
+    switchTab(tabId);
+});
+
+// Close dropdown when clicking outside
+$(document).on('click', function(e) {
+    if (!$(e.target).closest('#mobile-tab-dropdown, #mobile-tab-menu').length) {
+        $('#mobile-tab-menu').addClass('hidden');
+    }
+});
+
+// Tab functionality
+$(document).ready(function() {
+    const tabButtons = document.querySelectorAll('#productTabs .tab-button');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    // Function to update tab styles
+    function updateTabStyles() {
+        tabButtons.forEach(button => {
+            if (button.classList.contains('active')) {
+                // Active tab style
+                button.style.background = 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,197,253,0.05) 100%)';
+                button.style.borderColor = 'rgba(59,130,246,0.2)';
+                button.style.color = '#1e40af';
+                button.style.fontWeight = '600';
+                button.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)';
+            } else {
+                // Inactive tab style
+                button.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(248,250,252,0.5) 100%)';
+                button.style.borderColor = 'rgba(226,232,240,0.3)';
+                button.style.color = '#64748b';
+                button.style.fontWeight = '500';
+                button.style.boxShadow = '0 2px 4px -1px rgba(0,0,0,0.06)';
+            }
+        });
+    }
+    
+    // Add click event listeners to tabs
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            switchTab(this.id);
+        });
+    });
+    
+    // Function to switch tabs
+    function switchTab(tabId) {
+        const targetId = '#' + tabId.replace('-tab', '');
+        
+        // Remove active class from all tabs and panes
+        tabButtons.forEach(tab => tab.classList.remove('active'));
+        tabPanes.forEach(pane => {
+            pane.classList.remove('active');
+            pane.classList.add('hidden');
+        });
+        
+        // Add active class to clicked tab and corresponding pane
+        document.getElementById(tabId).classList.add('active');
+        const targetPane = document.querySelector(targetId);
+        if (targetPane) {
+            targetPane.classList.add('active');
+            targetPane.classList.remove('hidden');
+        }
+        
+        updateTabStyles();
+    }
+    
+    // Function to show result in Result tab
+    function showResultInTab(imageUrl) {
+        // Show the Result tab button
+        $('#result-tab').removeClass('hidden');
+        
+        // Update result content
+        const resultContent = `
+            <div class="text-center">
+                <img src="${imageUrl}" alt="Generisana slika" class="max-w-full h-auto rounded-xl shadow-2xl mx-auto" style="max-height: 500px;">
+                <div class="mt-6 flex justify-center space-x-4">
+                    <a href="${imageUrl}" download="generated-image.jpg" class="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors shadow-lg">
+                        <i class="fas fa-download mr-2"></i>Preuzmi sliku
+                    </a>
+                    <button onclick="copyToClipboard('${imageUrl}')" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg">
+                        <i class="fas fa-copy mr-2"></i>Kopiraj URL
+                    </button>
+                    <button onclick="generateNew()" class="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors shadow-lg">
+                        <i class="fas fa-plus mr-2"></i>Generiši novu
+                    </button>
+                </div>
+            </div>
+        `;
+        $('#resultContent').html(resultContent);
+        
+        // Switch to Result tab
+        tabButtons.forEach(tab => tab.classList.remove('active'));
+        tabPanes.forEach(pane => {
+            pane.classList.remove('active');
+            pane.classList.add('hidden');
+        });
+        document.getElementById('result-tab').classList.add('active');
+        document.getElementById('result').classList.add('active');
+        document.getElementById('result').classList.remove('hidden');
+        updateTabStyles();
+    }
+    
+    // Function to copy URL to clipboard
+    window.copyToClipboard = function(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            // Show success message
+            const toast = $('<div class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50"><i class="fas fa-check mr-2"></i>URL kopiran u clipboard!</div>');
+            $('body').append(toast);
+            setTimeout(() => toast.fadeOut(() => toast.remove()), 3000);
+        }).catch(function() {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const toast = $('<div class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50"><i class="fas fa-check mr-2"></i>URL kopiran u clipboard!</div>');
+            $('body').append(toast);
+            setTimeout(() => toast.fadeOut(() => toast.remove()), 3000);
+        });
+    };
+    
+    // Function to generate new image (reset form)
+    window.generateNew = function() {
+        // Switch back to first tab
+        tabButtons.forEach(tab => tab.classList.remove('active'));
+        tabPanes.forEach(pane => {
+            pane.classList.remove('active');
+            pane.classList.add('hidden');
+        });
+        document.getElementById('product-tab').classList.add('active');
+        document.getElementById('product').classList.add('active');
+        document.getElementById('product').classList.remove('hidden');
+        
+        // Hide Result tab
+        $('#result-tab').addClass('hidden');
+        
+        // Reset form
+        $('#productForm')[0].reset();
+        $('#imagePreview').addClass('hidden');
+        $('#resultsSection').addClass('hidden');
+        
+        updateTabStyles();
+    };
+    
+    // Next/Previous tab navigation
+    $('.next-tab').on('click', function() {
+        const nextTabId = $(this).data('next');
+        $('#' + nextTabId).click();
+    });
+    
+    $('.prev-tab').on('click', function() {
+        const prevTabId = $(this).data('prev');
+        $('#' + prevTabId).click();
+    });
+    
+    // Initialize tab styles
+    updateTabStyles();
+    
+    // Handle form submission
+    $('#productForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.text();
+        
+        // Show result tab and loading state
+        showResultTab();
+        showLoadingState();
+        
+        // Show loading state on submit button
+        submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Obrađujem...');
+        
+        $.ajax({
+            url: '{{ path('app_productgenerator') }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success && response.showInline) {
+                    // Show success state with image
+                    showSuccessState(response.downloadUrl);
+                } else if (response.success && response.redirectUrl) {
+                    // Redirect to the result page (fallback)
+                    window.location.href = response.redirectUrl;
+                } else {
+                    // Show error
+                    showErrorState(response.message || 'Došlo je do greške.');
+                }
+            },
+            error: function(xhr, status, error) {
+                let errorMsg = 'Greška: ' + error;
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMsg = xhr.responseJSON.error;
+                }
+                showErrorState(errorMsg);
+            },
+            complete: function() {
+                // Reset button
+                submitBtn.prop('disabled', false).text(originalText);
+            }
+        });
+    });
+    
+    // Function to show result tab
+    function showResultTab() {
+        $('#result-tab').removeClass('hidden');
+        switchTab('result-tab');
+    }
+    
+    // Function to show loading state
+    function showLoadingState() {
+        $('#loadingState').show();
+        $('#successState').hide();
+        $('#errorState').hide();
+    }
+    
+    // Function to show success state
+    function showSuccessState(downloadUrl) {
+        $('#loadingState').hide();
+        $('#errorState').hide();
+        
+        // Set image source and download link
+        const viewUrl = downloadUrl.replace('/download-image/', '/view-image/');
+        $('#generatedImage').attr('src', viewUrl);
+        $('#downloadGeneratedBtn').attr('href', downloadUrl);
+        
+        $('#successState').show();
+    }
+    
+    // Function to show error state
+    function showErrorState(message) {
+        $('#loadingState').hide();
+        $('#successState').hide();
+        $('#errorMessage').text(message);
+        $('#errorState').show();
+    }
+    
+    // Function to reset form
+    function resetForm() {
+        // Reset form fields
+        $('#productForm')[0].reset();
+        $('#imagePreview').addClass('hidden');
+        
+        // Hide result tab and go back to first tab
+        $('#result-tab').addClass('hidden');
+        switchTab('product-tab');
+        
+        // Reset states
+        $('#loadingState').hide();
+        $('#successState').hide();
+        $('#errorState').hide();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+app_product_description:
+    path: /product-description
+    controller: App\Controller\ProductDescriptionController::index
+
+# Account routes removed - controller deleted
+
+product_ai_result:
+    path: /product-ai/result
+    controller: App\Controller\ProductAiController::result

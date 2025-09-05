@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Dobrodošli</h1>
+        <p class="text-lg text-gray-600">Izaberite tool koji želite da koristite</p>
+    </div>
+    
+
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for tool in tools %}
+            <a href="{{ path(tool.route) }}" class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 text-center group">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-{{ tool.color }}-100 flex items-center justify-center group-hover:bg-{{ tool.color }}-200 transition-colors">
+                    <i class="fas {{ tool.icon }} text-2xl text-{{ tool.color }}-600"></i>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ tool.name }}</h2>
+                <p class="text-gray-600">{{ tool.description }}</p>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function refreshWebhookStatus() {
+    const statusDiv = document.getElementById('webhook-status');
+    statusDiv.innerHTML = '<div class="flex items-center text-blue-600"><i class="fas fa-spinner fa-spin text-2xl mr-3"></i><p class="font-medium">Proveravam status...</p></div>';
+    
+    fetch('{{ path('app_webhook_status') }}')
+        .then(response => response.json())
+        .then(data => {
+            let statusClass, icon, message;
+            
+            if (data.status === 'active') {
+                statusClass = 'text-green-600';
+                icon = 'fas fa-check-circle';
+                message = `<p class="font-medium">${data.message}</p><p class="text-sm text-gray-500">Production: ${data.production_url}</p>`;
+            } else if (data.status === 'inactive') {
+                statusClass = 'text-yellow-600';
+                icon = 'fas fa-exclamation-triangle';
+                message = `<p class="font-medium">${data.message}</p><p class="text-sm text-gray-500">Aktivirajte workflow u n8n editoru</p>`;
+            } else {
+                statusClass = 'text-red-600';
+                icon = 'fas fa-times-circle';
+                message = `<p class="font-medium">${data.message}</p><p class="text-sm text-gray-500">Proverite n8n konfiguraciju</p>`;
+            }
+            
+            statusDiv.innerHTML = `
+                <div class="flex items-center ${statusClass}">
+                    <i class="${icon} text-2xl mr-3"></i>
+                    <div>${message}</div>
+                </div>
+            `;
+        })
+        .catch(error => {
+            statusDiv.innerHTML = '<div class="flex items-center text-red-600"><i class="fas fa-times-circle text-2xl mr-3"></i><p class="font-medium">Greška pri proveri statusa</p></div>';
+        });
+}
+</script>
+{% endblock %}

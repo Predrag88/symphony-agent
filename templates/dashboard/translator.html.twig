@@ -1,0 +1,209 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prevodilac - VPA{% endblock %}
+
+{% block stylesheets %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block body %}
+<div class="bg-white min-h-screen">
+    <!-- Main Content -->
+    <div class="flex flex-col min-h-screen">
+        <div class="w-full md:w-3/5 mx-auto flex flex-col flex-grow">
+            <div class="text-center pt-8 mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Prevodilac</h1>
+                <p class="text-gray-600 text-sm">Profesionalni AI prevodilac srpski-engleski</p>
+            </div>
+            
+            <div id="translation-container" class="flex-grow space-y-4 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8">
+                <!-- Početna poruka dobrodošlice -->
+                <div class="flex justify-start mb-4">
+                    <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg bg-gray-200 text-gray-800">
+                        <span>Pozdrav! Ja sam vaš AI prevodilac. Unesite bilo koji tekst na srpskom jeziku i ja ću vam pružiti precizan prevod na engleski. Specijalizovan sam za kvalitetno prevođenje sa očuvanjem konteksta i značenja. Kako mogu da vam pomognem danas?</span>
+                    </div>
+                </div>
+                <!-- Ovde će se prikazivati originalni tekst i prevodi -->
+            </div>
+            <div class="fixed bottom-20 left-0 right-0 md:relative md:bottom-auto p-4 bg-white border-t z-40 md:z-auto">
+                <form id="translate-form" class="flex items-center space-x-2">
+                    <input type="text" id="text-to-translate" placeholder="Unesite tekst na srpskom..." class="flex-grow bg-gray-50 text-gray-800 rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold p-3 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+// Translator specific JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('translate-form');
+    const input = document.getElementById('text-to-translate');
+    const container = document.getElementById('translation-container');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Dodaj originalnu poruku korisnika
+        addMessage(text, 'user');
+        input.value = '';
+        
+        // Dodaj loading poruku
+        const loadingMessage = addMessage('Prevodi se...', 'agent');
+
+        try {
+            const response = await fetch('/api/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const translation = await response.text();
+            
+            // Ukloni loading poruku
+            container.removeChild(loadingMessage);
+            
+            // Dodaj prevod
+            addMessage(translation, 'agent');
+
+        } catch (error) {
+            console.error('Fetch error:', error);
+            // Ukloni loading poruku
+            container.removeChild(loadingMessage);
+            addMessage('Greška pri prevođenju: ' + error.message, 'agent');
+        }
+    });
+
+    function addMessage(message, sender) {
+        const messageWrapper = document.createElement('div');
+        messageWrapper.classList.add('flex', 'items-center', sender === 'user' ? 'justify-end' : 'justify-start', 'mb-4', 'group');
+
+        const bubble = document.createElement('div');
+        bubble.classList.add('max-w-xs', 'lg:max-w-md', 'px-4', 'py-2', 'rounded-lg');
+
+        if (sender === 'user') {
+            bubble.classList.add('bg-blue-600', 'text-white');
+            bubble.textContent = message;
+            messageWrapper.appendChild(bubble);
+        } else {
+            bubble.classList.add('bg-gray-200', 'text-gray-800');
+            bubble.textContent = message;
+
+            const copyIcon = document.createElement('i');
+            copyIcon.classList.add('fas', 'fa-copy', 'text-gray-400', 'cursor-pointer', 'ml-2', 'p-2', 'rounded-full', 'hover:bg-gray-300');
+            copyIcon.title = 'Kopiraj tekst';
+            copyIcon.setAttribute('data-message', message);
+
+            messageWrapper.appendChild(bubble);
+            messageWrapper.appendChild(copyIcon);
+
+            // Dodaj event listener na messageWrapper umesto na copyIcon
+            messageWrapper.addEventListener('click', (e) => {
+                // Proveri da li je kliknuto na copy ikonu ili SVG
+                const target = e.target;
+                const isClickOnCopyIcon = target.classList.contains('fa-copy') || 
+                                        target.closest('.fa-copy') || 
+                                        (target.tagName === 'svg' && target.closest('i.fa-copy')) ||
+                                        (target.tagName === 'path' && target.closest('svg') && target.closest('i.fa-copy'));
+                
+                if (isClickOnCopyIcon) {
+                    e.stopPropagation();
+                    const iconElement = copyIcon;
+                    copyToClipboard(message, iconElement);
+                }
+            });
+        }
+
+        container.appendChild(messageWrapper);
+        messageWrapper.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        return messageWrapper;
+    }
+
+    // Robusna funkcija za kopiranje teksta
+    function copyToClipboard(text, iconElement) {
+        // Pokušaj sa modernim Clipboard API
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopySuccess(iconElement);
+            }).catch(() => {
+                // Fallback na stariji način
+                fallbackCopyTextToClipboard(text, iconElement);
+            });
+        } else {
+            // Fallback na stariji način
+            fallbackCopyTextToClipboard(text, iconElement);
+        }
+    }
+
+    // Fallback funkcija za kopiranje
+    function fallbackCopyTextToClipboard(text, iconElement) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                showCopySuccess(iconElement);
+            } else {
+                console.error('Fallback: Kopiranje nije uspešno');
+            }
+        } catch (err) {
+            console.error('Fallback: Greška pri kopiranju', err);
+        }
+        
+        document.body.removeChild(textArea);
+    }
+
+    // Funkcija za prikazivanje uspešnog kopiranja
+    function showCopySuccess(iconElement) {
+        iconElement.classList.remove('fa-copy', 'text-gray-400');
+        iconElement.classList.add('fa-check', 'text-green-500');
+        iconElement.title = 'Kopirano!';
+        
+        // Flash efekat
+        flashElement(iconElement);
+        
+        setTimeout(() => {
+            iconElement.classList.remove('fa-check', 'text-green-500');
+            iconElement.classList.add('fa-copy', 'text-gray-400');
+            iconElement.title = 'Kopiraj tekst';
+        }, 2000);
+    }
+
+    // Flash efekat slično kao u serveru
+    function flashElement(element) {
+        element.style.transition = 'all 0.3s ease';
+        element.style.transform = 'scale(1.2)';
+        element.style.backgroundColor = '#10b981';
+        element.style.borderRadius = '50%';
+        
+        setTimeout(() => {
+            element.style.transform = 'scale(1)';
+            element.style.backgroundColor = '';
+        }, 300);
+    }
+});
+ </script>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+ {% endblock %}

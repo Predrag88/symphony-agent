@@ -1,0 +1,280 @@
+/* AI Alati Browser Extension - Content Styles */
+
+#ai-tools-panel {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 280px !important;
+    background: #ffffff !important;
+    border: 1px solid #e1e5e9 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+    z-index: 2147483647 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    color: #333 !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.ai-tools-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 12px 16px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border-radius: 12px 12px 0 0 !important;
+    cursor: move !important;
+    user-select: none !important;
+}
+
+.ai-tools-logo {
+    font-size: 18px !important;
+    margin-right: 8px !important;
+}
+
+.ai-tools-title {
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    flex: 1 !important;
+}
+
+.ai-tools-close {
+    background: none !important;
+    border: none !important;
+    color: white !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    width: 24px !important;
+    height: 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 4px !important;
+    transition: background-color 0.2s !important;
+}
+
+.ai-tools-close:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.ai-tools-content {
+    padding: 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+.ai-tool-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 16px !important;
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: #495057 !important;
+    text-align: left !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.ai-tool-btn:hover {
+    background: #e9ecef !important;
+    border-color: #dee2e6 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ai-tool-btn:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ai-tool-icon {
+    font-size: 16px !important;
+    width: 20px !important;
+    text-align: center !important;
+}
+
+.ai-tools-status {
+    padding: 8px 16px !important;
+    background: #f8f9fa !important;
+    border-top: 1px solid #e9ecef !important;
+    font-size: 12px !important;
+    color: #6c757d !important;
+    text-align: center !important;
+    border-radius: 0 0 12px 12px !important;
+}
+
+/* Notification Styles */
+.ai-tools-notification {
+    position: fixed !important;
+    top: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 400px !important;
+    max-width: 90vw !important;
+    background: #ffffff !important;
+    border: 1px solid #e1e5e9 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+    z-index: 2147483648 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    animation: slideInDown 0.3s ease-out !important;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.ai-notification-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 12px 16px !important;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    color: white !important;
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+
+.ai-notification-close {
+    background: none !important;
+    border: none !important;
+    color: white !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 4px !important;
+    transition: background-color 0.2s !important;
+}
+
+.ai-notification-close:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.ai-notification-content {
+    padding: 16px !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    color: #495057 !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #ai-tools-panel {
+        width: 260px !important;
+        right: 10px !important;
+        top: 10px !important;
+    }
+    
+    .ai-tools-notification {
+        width: 350px !important;
+        top: 10px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #ai-tools-panel {
+        width: calc(100vw - 20px) !important;
+        right: 10px !important;
+        left: 10px !important;
+        max-width: 300px !important;
+    }
+    
+    .ai-tools-notification {
+        width: calc(100vw - 20px) !important;
+        left: 10px !important;
+        right: 10px !important;
+        transform: none !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    #ai-tools-panel {
+        background: #2d3748 !important;
+        border-color: #4a5568 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .ai-tool-btn {
+        background: #4a5568 !important;
+        border-color: #718096 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .ai-tool-btn:hover {
+        background: #718096 !important;
+        border-color: #a0aec0 !important;
+    }
+    
+    .ai-tools-status {
+        background: #4a5568 !important;
+        border-color: #718096 !important;
+        color: #a0aec0 !important;
+    }
+    
+    .ai-tools-notification {
+        background: #2d3748 !important;
+        border-color: #4a5568 !important;
+    }
+    
+    .ai-notification-content {
+        color: #e2e8f0 !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    #ai-tools-panel {
+        border-width: 2px !important;
+    }
+    
+    .ai-tool-btn {
+        border-width: 2px !important;
+    }
+    
+    .ai-tools-notification {
+        border-width: 2px !important;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .ai-tool-btn {
+        transition: none !important;
+    }
+    
+    .ai-tools-notification {
+        animation: none !important;
+    }
+    
+    .ai-tools-close,
+    .ai-notification-close {
+        transition: none !important;
+    }
+}

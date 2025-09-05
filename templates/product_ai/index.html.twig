@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product AI Generator{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                <i class="fas fa-camera text-purple-600 mr-3"></i>
+                Product AI Generator
+            </h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Kreiraj savršene avatare za svoje proizvode koristeći naprednu AI tehnologiju
+            </p>
+        </div>
+
+        <!-- Navigation Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Generator Card -->
+            <a href="{{ path('app_productgenerator') }}" class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 text-center group">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                    <i class="fas fa-magic text-2xl text-purple-600"></i>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-900 mb-2">AI Generator</h2>
+                <p class="text-gray-600">Generiši avatare za proizvode sa detaljnim opcijama</p>
+            </a>
+
+            <!-- Gallery Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center opacity-75">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-images text-2xl text-gray-400"></i>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-500 mb-2">Galerija</h2>
+                <p class="text-gray-400">Pregledaj generisane slike (uskoro)</p>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Mogućnosti AI Generatora</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900 mb-2">Različiti Modeli</h4>
+                    <p class="text-gray-600 text-sm">Muškarci, žene, deca ili samo proizvod</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+                        <i class="fas fa-palette text-green-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900 mb-2">Stilovi Odeće</h4>
+                    <p class="text-gray-600 text-sm">Casual, formal, sportski i drugi stilovi</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-yellow-100 flex items-center justify-center">
+                        <i class="fas fa-camera text-yellow-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900 mb-2">Različite Scene</h4>
+                    <p class="text-gray-600 text-sm">Studio, priroda, urbano okruženje</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="mt-8 text-center">
+            <a href="{{ path('app_product_ai_generator') }}" class="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors duration-200">
+                <i class="fas fa-rocket mr-2"></i>
+                Počni sa Generisanjem
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

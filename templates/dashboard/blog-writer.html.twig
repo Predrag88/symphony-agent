@@ -1,0 +1,635 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog Writer - VPA Dashboard{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1">
+        <div class="w-full">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">AI Blog Writer</h1>
+                <p class="text-xl text-gray-600">Kreiraj kvalitetan blog sadržaj sa SEO optimizacijom</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Blog Generation Form -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-lg border-0 h-full">
+                <div class="bg-blue-600 text-white px-6 py-4 rounded-t-lg">
+                    <h5 class="text-lg font-semibold mb-0">
+                        <i class="fas fa-edit mr-2"></i>
+                        Generiši Blog
+                    </h5>
+                </div>
+                <div class="p-6">
+                    <form id="blogForm">
+                        <div class="mb-4">
+                            <label for="blogTopic" class="block text-sm font-bold text-gray-700 mb-2">Tema bloga</label>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="blogTopic" placeholder="Unesite temu vašeg bloga..." required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="blogKeywords" class="block text-sm font-bold text-gray-700 mb-2">Ključne reči (SEO)</label>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="blogKeywords" placeholder="ključna reč 1, ključna reč 2, ...">
+                            <small class="text-gray-500 text-sm mt-1">Odvojite ključne reči zarezom</small>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="blogTone" class="block text-sm font-bold text-gray-700 mb-2">Ton pisanja</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="blogTone">
+                                <option value="professional">Profesionalni</option>
+                                <option value="casual">Ležerni</option>
+                                <option value="friendly">Prijateljski</option>
+                                <option value="formal">Formalni</option>
+                                <option value="conversational">Konverzacijski</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="blogLength" class="block text-sm font-bold text-gray-700 mb-2">Dužina članka</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="blogLength">
+                                <option value="short">Kratko (300-500 reči)</option>
+                                <option value="medium" selected>Srednje (500-1000 reči)</option>
+                                <option value="long">Dugačko (1000-1500 reči)</option>
+                                <option value="very-long">Vrlo dugačko (1500+ reči)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="blogLanguage" class="block text-sm font-bold text-gray-700 mb-2">Jezik</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="blogLanguage">
+                                <option value="sr" selected>Srpski</option>
+                                <option value="en">Engleski</option>
+                                <option value="de">Nemački</option>
+                                <option value="fr">Francuski</option>
+                                <option value="es">Španski</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex items-center mb-3">
+                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" type="checkbox" id="includeSEO" checked>
+                                <label class="ml-2 text-sm font-medium text-gray-700" for="includeSEO">
+                                    Uključi SEO optimizaciju
+                                </label>
+                            </div>
+                            <div class="flex items-center">
+                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" type="checkbox" id="includeImages">
+                                <label class="ml-2 text-sm font-medium text-gray-700" for="includeImages">
+                                    Predloži slike
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200" id="generateBtn">
+                            <i class="fas fa-magic mr-2"></i>
+                            Generiši Blog
+                        </button>
+                    </form>
+                    
+                    <!-- File Upload Section -->
+                    <hr class="my-6 border-gray-200">
+                    <div class="mb-4">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Ili otpremi fajl</label>
+                        <div class="drop-zone border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-gray-50 transition-colors" id="dropZone">
+                            <div class="drop-zone-content">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
+                                <p class="mb-2 text-gray-600">Prevucite fajl ovde ili kliknite da izaberete</p>
+                                <small class="text-gray-500">Podržani formati: .txt, .docx, .pdf</small>
+                            </div>
+                            <input type="file" id="fileInput" class="hidden" accept=".txt,.docx,.pdf">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Blog Content Display -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-lg border-0 h-full">
+                <div class="bg-green-600 text-white px-6 py-4 rounded-t-lg flex justify-between items-center">
+                    <h5 class="text-lg font-semibold mb-0">
+                        <i class="fas fa-file-alt mr-2"></i>
+                        Generirani Blog
+                    </h5>
+                    <div class="flex space-x-2">
+                        <button class="bg-white text-gray-700 hover:bg-gray-100 px-3 py-1 rounded text-sm font-medium transition-colors" id="copyBlogBtn" disabled>
+                            <i class="fas fa-copy mr-1"></i>
+                            Kopiraj
+                        </button>
+                        <button class="bg-white text-gray-700 hover:bg-gray-100 px-3 py-1 rounded text-sm font-medium transition-colors" id="downloadBtn" disabled>
+                            <i class="fas fa-download mr-1"></i>
+                            Preuzmi
+                        </button>
+                        <button class="bg-white text-gray-700 hover:bg-gray-100 px-3 py-1 rounded text-sm font-medium transition-colors" id="clearBlogBtn" disabled>
+                            <i class="fas fa-trash mr-1"></i>
+                            Obriši
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 relative">
+                    <div id="blogContent" class="blog-content">
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-edit text-4xl mb-4 opacity-50"></i>
+                            <h4 class="text-xl font-semibold text-gray-700 mb-2">Dobrodošli u AI Blog Writer</h4>
+                            <p class="text-gray-600">Unesite temu i parametre u formi levo da biste generisali kvalitetan blog sadržaj.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading Overlay -->
+                    <div id="loadingOverlay" class="loading-overlay hidden absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+                            <h5 class="text-lg font-semibold text-gray-700 mb-2">Generiše se blog sadržaj...</h5>
+                            <p class="text-gray-500">Ovo može potrajati nekoliko sekundi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Blog History -->
+    <div class="grid grid-cols-1 mt-6">
+        <div class="col-span-1">
+            <div class="bg-white rounded-lg shadow-lg border-0">
+                <div class="bg-blue-500 text-white px-6 py-4 rounded-t-lg">
+                    <h5 class="text-lg font-semibold mb-0">
+                        <i class="fas fa-history mr-2"></i>
+                        Istorija blogova
+                    </h5>
+                </div>
+                <div class="p-6">
+                    <div id="blogHistory">
+                        <p class="text-gray-500 text-center">Nema prethodnih blogova</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Toast -->
+<div class="fixed bottom-0 right-0 p-4 z-50">
+    <div id="successToast" class="hidden bg-white border border-green-400 rounded-lg shadow-lg max-w-sm" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="flex items-center justify-between p-4 border-b border-green-200">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                <strong class="text-gray-800">Uspešno</strong>
+            </div>
+            <button type="button" class="text-gray-400 hover:text-gray-600" onclick="hideToast()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-4 text-gray-700" id="toastMessage">
+            Operacija je uspešno završena!
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+let blogHistory = JSON.parse(localStorage.getItem('blogHistory')) || [];
+let currentBlogContent = '';
+
+$(document).ready(function() {
+    loadBlogHistory();
+    
+    // Form submission
+    $('#blogForm').on('submit', function(e) {
+        e.preventDefault();
+        generateBlog();
+    });
+    
+    // File upload handling
+    $('#dropZone').on('click', function() {
+        $('#fileInput').click();
+    });
+    
+    $('#dropZone').on('dragover', function(e) {
+        e.preventDefault();
+        $(this).addClass('drag-over');
+    });
+    
+    $('#dropZone').on('dragleave', function(e) {
+        e.preventDefault();
+        $(this).removeClass('drag-over');
+    });
+    
+    $('#dropZone').on('drop', function(e) {
+        e.preventDefault();
+        $(this).removeClass('drag-over');
+        
+        const files = e.originalEvent.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileUpload(files[0]);
+        }
+    });
+    
+    $('#fileInput').on('change', function() {
+        if (this.files.length > 0) {
+            handleFileUpload(this.files[0]);
+        }
+    });
+    
+    // Action buttons
+    $('#copyBlogBtn').on('click', function() {
+        copyToClipboard(currentBlogContent);
+    });
+    
+    $('#downloadBtn').on('click', function() {
+        downloadBlog();
+    });
+    
+    $('#clearBlogBtn').on('click', function() {
+        clearBlog();
+    });
+});
+
+function generateBlog() {
+    const topic = $('#blogTopic').val().trim();
+    const keywords = $('#blogKeywords').val().trim();
+    const tone = $('#blogTone').val();
+    const length = $('#blogLength').val();
+    const language = $('#blogLanguage').val();
+    const includeSEO = $('#includeSEO').is(':checked');
+    const includeImages = $('#includeImages').is(':checked');
+    
+    if (!topic) {
+        alert('Molimo unesite temu bloga.');
+        return;
+    }
+    
+    // Show loading
+    $('#loadingOverlay').removeClass('hidden');
+    $('#generateBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Generiše se...');
+    
+    // Prepare data
+    const requestData = {
+        topic: topic,
+        keywords: keywords,
+        tone: tone,
+        length: length,
+        language: language,
+        includeSEO: includeSEO,
+        includeImages: includeImages
+    };
+    
+    // Send to API
+    $.ajax({
+        url: '/api/blog',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(requestData),
+        success: function(response) {
+            let blogContent = '';
+            
+            if (typeof response === 'string') {
+                blogContent = response;
+            } else if (response.content) {
+                blogContent = response.content;
+            } else if (response.blog) {
+                blogContent = response.blog;
+            } else {
+                blogContent = JSON.stringify(response, null, 2);
+            }
+            
+            displayBlog(blogContent, topic);
+            addToBlogHistory(topic, blogContent, requestData);
+        },
+        error: function(xhr, status, error) {
+            console.error('Blog generation error:', error);
+            $('#blogContent').html(`
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Greška pri generisanju bloga. Molimo pokušajte ponovo.
+                </div>
+            `);
+        },
+        complete: function() {
+            $('#loadingOverlay').addClass('hidden');
+            $('#generateBtn').prop('disabled', false).html('<i class="fas fa-magic mr-2"></i>Generiši Blog');
+        }
+    });
+}
+
+function displayBlog(content, title) {
+    currentBlogContent = content;
+    
+    // Format content for display
+    let formattedContent = content
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>')
+        .replace(/^/, '<p>')
+        .replace(/$/, '</p>')
+        .replace(/<p><\/p>/g, '')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    $('#blogContent').html(`
+        <div class="blog-article">
+            <h2 class="blog-title mb-4">${title}</h2>
+            <div class="blog-text">
+                ${formattedContent}
+            </div>
+        </div>
+    `);
+    
+    // Enable action buttons
+    $('#copyBlogBtn, #downloadBtn, #clearBlogBtn').prop('disabled', false);
+}
+
+function handleFileUpload(file) {
+    const allowedTypes = ['text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf'];
+    
+    if (!allowedTypes.includes(file.type)) {
+        alert('Nepodržan tip fajla. Molimo koristite .txt, .docx ili .pdf fajlove.');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    $('#loadingOverlay').removeClass('hidden');
+    
+    // Here you would typically upload the file to your API
+    // For now, we'll simulate file processing
+    setTimeout(() => {
+        $('#loadingOverlay').addClass('hidden');
+        showToast('Fajl je uspešno otpremljen i obrađen!');
+    }, 2000);
+}
+
+function addToBlogHistory(title, content, params) {
+    const historyItem = {
+        id: Date.now(),
+        title: title,
+        content: content,
+        params: params,
+        timestamp: new Date().toLocaleString('sr-RS')
+    };
+    
+    blogHistory.unshift(historyItem);
+    
+    // Keep only last 10 blogs
+    if (blogHistory.length > 10) {
+        blogHistory = blogHistory.slice(0, 10);
+    }
+    
+    localStorage.setItem('blogHistory', JSON.stringify(blogHistory));
+    loadBlogHistory();
+}
+
+function loadBlogHistory() {
+    const historyContainer = $('#blogHistory');
+    
+    if (blogHistory.length === 0) {
+        historyContainer.html('<p class="text-gray-500 text-center">Nema prethodnih blogova</p>');
+        return;
+    }
+    
+    let historyHtml = '';
+    
+    blogHistory.forEach(item => {
+        const preview = item.content.substring(0, 150) + (item.content.length > 150 ? '...' : '');
+        
+        historyHtml += `
+            <div class="border border-gray-200 rounded-lg p-4 mb-4 history-item" data-id="${item.id}">
+                <div class="flex justify-between items-start mb-3">
+                    <h6 class="text-lg font-semibold text-gray-800 mb-1">${item.title}</h6>
+                    <div class="flex space-x-2">
+                        <button class="bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 px-2 py-1 rounded text-sm transition-colors" onclick="loadBlogFromHistory(${item.id})" title="Učitaj blog">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 px-2 py-1 rounded text-sm transition-colors" onclick="copyBlogFromHistory(${item.id})" title="Kopiraj">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-2 py-1 rounded text-sm transition-colors" onclick="deleteFromBlogHistory(${item.id})" title="Obriši">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-3">${preview}</p>
+                <small class="text-gray-500">
+                    <i class="fas fa-clock mr-1"></i>
+                    ${item.timestamp}
+                </small>
+            </div>
+        `;
+    });
+    
+    historyContainer.html(historyHtml);
+}
+
+function loadBlogFromHistory(id) {
+    const item = blogHistory.find(h => h.id === id);
+    if (item) {
+        displayBlog(item.content, item.title);
+        
+        // Load form parameters
+        $('#blogTopic').val(item.title);
+        if (item.params) {
+            $('#blogKeywords').val(item.params.keywords || '');
+            $('#blogTone').val(item.params.tone || 'professional');
+            $('#blogLength').val(item.params.length || 'medium');
+            $('#blogLanguage').val(item.params.language || 'sr');
+            $('#includeSEO').prop('checked', item.params.includeSEO !== false);
+            $('#includeImages').prop('checked', item.params.includeImages === true);
+        }
+        
+        // Scroll to blog content
+        $('html, body').animate({ scrollTop: $('#blogContent').offset().top - 100 }, 500);
+    }
+}
+
+function copyBlogFromHistory(id) {
+    const item = blogHistory.find(h => h.id === id);
+    if (item) {
+        copyToClipboard(item.content);
+    }
+}
+
+function deleteFromBlogHistory(id) {
+    if (confirm('Da li ste sigurni da želite da obrišete ovaj blog iz istorije?')) {
+        blogHistory = blogHistory.filter(h => h.id !== id);
+        localStorage.setItem('blogHistory', JSON.stringify(blogHistory));
+        loadBlogHistory();
+    }
+}
+
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('Sadržaj je uspešno kopiran!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            fallbackCopyTextToClipboard(text);
+        });
+    } else {
+        fallbackCopyTextToClipboard(text);
+    }
+}
+
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+    textArea.style.position = 'fixed';
+    
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showToast('Sadržaj je uspešno kopiran!');
+        }
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+function downloadBlog() {
+    if (!currentBlogContent) {
+        alert('Nema sadržaja za preuzimanje.');
+        return;
+    }
+    
+    const title = $('#blogTopic').val() || 'blog';
+    const filename = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+    
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(currentBlogContent));
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    
+    showToast('Blog je uspešno preuzet!');
+}
+
+function clearBlog() {
+    if (confirm('Da li ste sigurni da želite da obrišete trenutni blog sadržaj?')) {
+        currentBlogContent = '';
+        $('#blogContent').html(`
+            <div class="text-center text-gray-500 py-8">
+                <i class="fas fa-edit text-4xl mb-4 opacity-50"></i>
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Dobrodošli u AI Blog Writer</h4>
+                <p class="text-gray-600">Unesite temu i parametre u formi levo da biste generisali kvalitetan blog sadržaj.</p>
+            </div>
+        `);
+        $('#copyBlogBtn, #downloadBtn, #clearBlogBtn').prop('disabled', true);
+    }
+}
+
+function showToast(message) {
+    $('#toastMessage').text(message);
+    $('#successToast').removeClass('hidden');
+    
+    // Auto hide after 3 seconds
+    setTimeout(() => {
+        hideToast();
+    }, 3000);
+}
+
+function hideToast() {
+    $('#successToast').addClass('hidden');
+}
+</script>
+
+<style>
+.drop-zone {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+    border-color: #0d6efd;
+    background-color: #f8f9fa;
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.blog-content {
+    min-height: 400px;
+}
+
+.blog-article {
+    line-height: 1.8;
+}
+
+.blog-title {
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.blog-text {
+    color: #34495e;
+    font-size: 1.1rem;
+}
+
+.blog-text h1, .blog-text h2, .blog-text h3 {
+    color: #2c3e50;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.blog-text p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.blog-text ul, .blog-text ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.blog-text li {
+    margin-bottom: 0.5rem;
+}
+
+.history-item {
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}
