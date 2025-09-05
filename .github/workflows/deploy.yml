@@ -1,0 +1,52 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, mysql
+        coverage: none
+        
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+          
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+      
+    - name: Run tests
+      run: php bin/phpunit
+      
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /path/to/your/project
+          git pull origin main
+          composer install --no-dev --optimize-autoloader
+          php bin/console cache:clear --env=prod
+          php bin/console doctrine:migrations:migrate --no-interaction
+          sudo systemctl reload php8.1-fpm
+          sudo systemctl reload nginx
